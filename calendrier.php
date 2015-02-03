@@ -11,41 +11,38 @@
 
 	<body>
 
+	<?php $mois = array('Januarius', 'Februarius', 'Martius', 'Aprilis', 'Maius', 'Junius', 'Augustus', 'September', 'October', 'November', 'December');
+		  $semaine = array('Lunae', 'Martis', 'Mercurii', 'Jovis', 'Veneris', 'Saturni', 'Dominicus'); 
+		  $jour = array('1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31');
+	?>
+
 
 	<h1>Calendrier</h1> 
-
-		<form>
-			<select>
-					<?php $mois = array('Januarius', 'Februarius', 'Martius', 'Aprilis', 'Maius', 'Junius', 'Augustus', 'September', 'October', 'November', 'December'); 
-					for ($i=0; $i < count($mois) ; $i++) 
-						{ 
-					echo '<option>' . $mois[$i] . '</option>';
-						} ;?>
-			</select>
-		</form>
 		
 		<TABLE> 
 			<tr>
 				<?php $semaine = array('Lunae', 'Martis', 'Mercurii', 'Jovis', 'Veneris', 'Saturni', 'Dominicus');
 				for ($j=0; $j < 7 ; $j++)
-					 { 
+					{ 
 				echo '<th>' . $semaine[$j] . '</th>';
 					} ?>
 			</tr>
 				
-			<?php 
-				$nombre_de_jours = cal_days_in_month(CAL_GREGORIAN, 3, 2015);
-				echo '<tr>';
+		<?php 
+			$nombre_de_jours = cal_days_in_month(CAL_GREGORIAN, 3, 2015);
+			echo '<tr>';
 
-				for ($l=0; $l <6; $l++)
+			$x = 1;			
+			for ($i=1; $i <= $nombre_de_jours; $i++, $x++)
 				{ 
-						echo '</tr><tr>';
-						for ($i=0; $i <7; $i++) { 
-							echo '<td></td>';
-						}
-				} ?>
-				
+				echo '<td>' . $i . '</td>';
+						
+				if ($x == 7){
+				$x = 0;
+				echo '</tr><tr>';}
+				}
+			echo '</tr>';
+		 ?>
 		</TABLE> 
 	</body>
-
 </html>
