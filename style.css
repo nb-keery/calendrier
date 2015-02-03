@@ -5,11 +5,24 @@ body, html
 	background-color: rgb(218, 233, 234);
 }
 
-caption
+h1
 {
 	font-family: Magneto;
 	font-size: 26px;
 	margin: 15px 0px;
+	text-align: center;
+}
+
+select
+{
+	margin: 0 auto;
+	display: block;
+	margin-bottom: 25px;
+	padding: 10px 40px;
+	background-color: rgb(114, 172, 176);
+	border-radius:  5px;
+	border: 1px solid rgb(148, 148, 148);
+	box-shadow: 1px 4px 9px #aaa;
 }
 
 table
@@ -17,6 +30,7 @@ table
 	border: 1px solid rgb(148, 148, 148);
 	margin: 0 auto;
 	border-spacing: 0px;
+	box-shadow: 1px 4px 9px #aaa;
 }
 
 th, td
@@ -27,7 +41,13 @@ th, td
 	font-family: helvetica;
 }
 
+td
+{
+	text-align: right;
+}
+
 th:hover
+
 {
 	background-color: rgb(79, 81, 87);
 }
