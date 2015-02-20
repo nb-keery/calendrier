@@ -11,63 +11,76 @@
 
 	<body>
 
-	<?php $mois = array('Januarius', 'Februarius', 'Martius', 'Aprilis', 'Maius', 'Junius', 'Augustus', 'September', 'October', 'November', 'December');
-		  $semaine = array('Lunae', 'Martis', 'Mercurii', 'Jovis', 'Veneris', 'Saturni', 'Dominicus'); 
-			function chif_rome($num)
-			{
-			  //I V X  L  C   D   M
-			  //1 5 10 50 100 500 1k
-			  $rome =array("","I","II","III","IV","V","VI","VII","VIII","IX");
-			  $rome2=array("","X","XX","XXX","XL","L","LX","LXX","LXXX","XC");
-			  $rome3=array("","C","CC","CCC","CD","D","DC","DCC","DCCC","CM");
-			  $rome4=array("","M","MM","MMM","IVM","VM","VIM","VIIM","VIIIM","IXM");
-			  $str=$rome[$num%10];
-			  $num-=($num%10);
-			  $num/=10;
-			  $str=$rome2[$num%10].$str;
-			  $num-=($num%10);
-			  $num/=10;
-			  $str=$rome3[$num%10].$str;
-			  $num-=($num%10);
-			  $num/=10;
-			  $str=$rome4[$num%10].$str;
-			  return $str;
-			}?>
-
+	<?php 
+		//Tableau des mois en latin
+		  $mois = array('Januarius', 'Februarius', 'Martius', 'Aprilis', 'Maius', 'Junius', 'Julius', 'Augustus', 'September', 'October', 'November', 'December');
+		//Tableau des jours de la semaine en latin  
+		  $semaine = array('', 'Lunae', 'Martis', 'Mercurii', 'Jovis', 'Veneris', 'Saturni', 'Dominicus'); 
+		//Tableau des jours en chiffre romain
+		  $jour = array('I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII', 'XIII', 'XIV', 'XV', 'XVI', 'XVII', 'XVIII', 'XIX', 'XX', 'XXI', 'XXII', 'XXIII', 'XXIV', 'XXV', 'XXVI', 'XXVII', 'XVIII', 'XXIX', 'XXX', 'XXXI'); ?>
 
 	<h1>Calendrier</h1> 
 
-		<span><img src="gauche.png"><?php echo date('F Y'); ?><img src="droite.png"></span>
+
+		<?php 
+		if(isset($_GET['mois'])){
+			if ($_GET['mois']== 0) {
+				$moisActuel = 12;
+			}
+			elseif ($_GET['mois'] == 13) {
+					$moisActuel = 1;
+			}
+			else { $moisActuel = $_GET['mois']; 
+			}
+		}
+		else { $moisActuel = date('n');} ?>
+
+		<span><a href="?mois=<?php echo $moisActuel-1; ?>"><img src="gauche.png"></a> 
+
+		<?php echo $mois[$moisActuel-1] . ' ' . date('Y'); ?>
+
+		<a href="?mois=<?php echo $moisActuel+1; ?>"><img src="droite.png"></a></span>
+
 		
 		<TABLE> 
 			<tr>
-				<?php $semaine = array('','Lunae', 'Martis', 'Mercurii', 'Jovis', 'Veneris', 'Saturni', 'Dominicus');
+				<?php
+				//Boucle sur le tableau des jours de la semaine pour les afficher dans des cases différentes mais sur la même ligne
 				for ($j=0; $j < count($semaine) ; $j++)
 					{ 
-				echo '<th><div>' . $semaine[$j] . '</div></th>';
+				echo '<th>' . $semaine[$j] . '</th>';
 					} ?>
 			</tr>
 				
 		<?php 
-			$semaine = date('W', strtotime('01-02-2015'));
-			$nombre_de_jours = cal_days_in_month(CAL_GREGORIAN, date('n'), date('Y'));
-			echo '<tr><th>' . $semaine++ . '</th>';
+			//Calcul du numéro de la semaine (ex: Semaine 6) par rapport au premier du mois
+			$semaine = date('W', strtotime('01-' .  $moisActuel .'-' . date('Y')));
 
-			$debut_de_mois = date('w', strtotime('01-' . date('n-Y'))-1);
+			//Sert à connaitre le mois débute quel jour (ex: Mardi)
+			$debut_de_mois = date('w', strtotime('01-' . $moisActuel .'-' . date('Y'))-1);
+
+			//Calcul le nombre de jours de chaque mois
+			$nombre_de_jours = cal_days_in_month(CAL_GREGORIAN, $moisActuel, date('Y'));
 			
-			for ($i=0; $i < $debut_de_mois ; $i++) {
+			echo '<tr><th>' . $semaine++ . '</th>';
+			
+			//Boucle pour savoir combien il doit laisser de cases vides avant de commencer à écrire 
+			for ($i=1; $i <= $debut_de_mois ; $i++) {
 
+				//Les cases vides
 				echo '<td></td>';
 			}
-			
-			$a=0;
-			$b=0;
-			for ($j= 1; $j <= $nombre_de_jours ; $j++, $b++) { 
-				echo '<td> ' . chif_rome($j) . '</td>';
-				if ($b%7 == 0) {
+
+			//Affiche les jours de la semaine en chiffre romain à l'aide du tableau $jour
+			for ($j= 0; $j < $nombre_de_jours ; $j++, $i++) { 
+				echo '<td> ' . $jour[$j] . '</td>';
+
+				//Si la variable $b est égale à 7 elle ferme la ligne du tableau et en ouvre une autre, et ainsi elle retourne à 0 pour créer plusieurs lignes
+				if ($i%7 == 0) {
 					echo '</tr><tr><th>0' . $semaine++ . '</th>';
 				}
 			}
+			//On ferme la dernière ligne et termine le tableau
 			echo '</tr>';
 		 ?>
 		</TABLE> 
