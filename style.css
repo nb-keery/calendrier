@@ -68,3 +68,8 @@ td:hover
 {
 	background-color: rgb(114, 172, 176);
 }
+
+#day
+{
+	margin: 15px 0px 0px 300px;
+}

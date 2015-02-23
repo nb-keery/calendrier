@@ -5,6 +5,7 @@
 		<!--[if lt IE 9]>
 			<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 		<![endif]-->
+				<link rel="shortcut icon" href="logo.png" type="image/x-icon" />
 				<title>Calendrier</title>
 			<link rel="stylesheet" type="text/css" href="style.css">
 	</head>
@@ -48,7 +49,17 @@
 			}
 		
 		// Si je n'appuie sur rien l'année affichée est l'année actuelle
-		else { $anneeActuelle = date('Y') ; } ?>
+		else { $anneeActuelle = date('Y'); } ?>
+
+		<?php 
+			//Si et seulement si je choisis une journée dans la liste, alors le premier jour du mois devient le jour choisit
+			if (isset($_POST['envoyerDébutDeMois'])) {
+			$jourSélectionné = $_POST['jourChoisi'];  }
+
+			//Sinon le premier jour du mois est calculé automatiquement par rapport au mois et l'année 
+			else {
+				$jourSélectionné = 'w';
+			} ?>
 
 		<span>
 			<a href="?mois=<?php echo $moisActuel-1; ?>"><img src="gauche.png"></a> 
@@ -82,15 +93,15 @@
 				
 		<?php 
 			//Calcul du numéro de la semaine (ex: Semaine 6) par rapport au premier du mois
-			$semaine = date('W', strtotime('01-' .  $moisActuel .'-' . $anneeActuelle));
+			$numéroSemaine = date('W', strtotime('01-' .  $moisActuel .'-' . $anneeActuelle));
 
 			//Sert à connaitre le mois débute quel jour (ex: Mardi)
-			$debut_de_mois = date('w', strtotime('01-' . $moisActuel .'-' . $anneeActuelle)-1);
+			$debut_de_mois = date($jourSélectionné, strtotime('01-' . $moisActuel .'-' . $anneeActuelle)-1)-1;
 
 			//Calcul le nombre de jours de chaque mois
 			$nombre_de_jours = cal_days_in_month(CAL_GREGORIAN, $moisActuel, $anneeActuelle);
 			
-			echo '<tr><th>' . $semaine++ . '</th>';
+			echo '<tr><th>' . $numéroSemaine++ . '</th>';
 			
 			//Boucle pour savoir combien il doit laisser de cases vides avant de commencer à écrire 
 			for ($i=1; $i <= $debut_de_mois ; $i++) {
@@ -105,12 +116,24 @@
 
 				//Si la variable $b est égale à 7 elle ferme la ligne du tableau et en ouvre une autre, et ainsi elle retourne à 0 pour créer plusieurs lignes
 				if ($i%7 == 0) {
-					echo '</tr><tr><th>' . $semaine++ . '</th>';
+					echo '</tr><tr><th>' . $numéroSemaine++ . '</th>';
 				}
 			}
 			//On ferme la dernière ligne et termine le tableau
 			echo '</tr>';
 		 ?>
 		</TABLE> 
+
+		<form action="" method="POST" id="day">
+			<select name="jourChoisi">
+				<?php 
+				$o=0;
+				while ($o <= count($semaine)-2) {
+					$o++;
+					echo '<option>' . $o .' </option>';
+				} ?>
+			</select>
+			<input type="submit" name="envoyerDébutDeMois" value="Comprobo">
+		</form>
 	</body>
 </html>
